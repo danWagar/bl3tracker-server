@@ -3,7 +3,9 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Items Endpoints', function() {
+const testUsers = helpers.makeUsersArray();
+
+describe('Items Endpoints', function() {
   let db;
 
   before('make knex instance', () => {
@@ -17,10 +19,12 @@ describe.only('Items Endpoints', function() {
   after('disconnect from db', () => db.destroy());
 
   describe(`GET /api/items`, () => {
+    beforeEach(() => helpers.seedUsers(db, testUsers));
     context(`Returns items`, () => {
       it(`responds with 200 and the items`, () => {
         return supertest(app)
           .get('/api/items')
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
           .expect(200);
       });
     });

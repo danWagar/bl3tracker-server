@@ -7,7 +7,7 @@ const helpers = require('./test-helpers');
 describe('Users Endpoints', function() {
   let db;
 
-  const { testUsers } = helpers.makeThingsFixtures();
+  const testUsers = helpers.makeUsersArray();
   const testUser = testUsers[0];
 
   before('make knex instance', () => {

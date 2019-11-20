@@ -30,43 +30,31 @@ function makeUsersArray() {
   ];
 }
 
-function makeThingsArray(users) {
+function makeUserCharactersArray(users) {
   return [
     {
       id: 1,
-      title: 'First test thing!',
-      image: 'http://placehold.it/500x500',
       user_id: users[0].id,
-      date_created: '2029-01-22T16:28:32.615Z',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?'
+      character: 'FL4K',
+      character_name: ''
     },
     {
       id: 2,
-      title: 'Second test thing!',
-      image: 'http://placehold.it/500x500',
       user_id: users[1].id,
-      date_created: '2029-01-22T16:28:32.615Z',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?'
+      character: 'Moze',
+      character_name: 'Mozes'
     },
     {
       id: 3,
-      title: 'Third test thing!',
-      image: 'http://placehold.it/500x500',
-      user_id: users[2].id,
-      date_created: '2029-01-22T16:28:32.615Z',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?'
+      user_id: users[0].id,
+      character: 'Zane',
+      character_name: 'Zaney'
     },
     {
       id: 4,
-      title: 'Fourth test thing!',
-      image: 'http://placehold.it/500x500',
       user_id: users[3].id,
-      date_created: '2029-01-22T16:28:32.615Z',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?'
+      character: 'Amara',
+      character_name: 'Siren girl'
     }
   ];
 }
@@ -128,16 +116,16 @@ function makeMaliciousThing(user) {
   };
 }
 
-function makeThingsFixtures() {
+function makeCharactersFixtures() {
   const testUsers = makeUsersArray();
-  //const testThings = makeThingsArray(testUsers);
-  return { testUsers };
+  const testUserCharacters = makeUserCharactersArray(testUsers);
+  return { testUsers, testUserCharacters };
 }
 
 function cleanTables(db) {
   return db.raw(
     `TRUNCATE
-      users
+      users, user_characters
       RESTART IDENTITY CASCADE`
   );
 }
@@ -156,15 +144,11 @@ function seedUsers(db, users) {
     );
 }
 
-function seedThingsTables(db, users, things, reviews = []) {
+function seedCharactersTables(db, users, characters) {
   return db.transaction(async trx => {
     await seedUsers(trx, users);
-    await trx.into('thingful_things').insert(things);
-    await trx.raw(`SELECT setval('thingful_things_id_seq', ?)`, [things[things.length - 1].id]);
-    if (reviews.length) {
-      await trx.into('thingful_reviews').insert(reviews);
-      await trx.raw(`SELECT setval('thingful_reviews_id_seq', ?)`, [reviews[reviews.length - 1].id]);
-    }
+    await trx.into('user_characters').insert(characters);
+    await trx.raw(`SELECT setval('user_characters_id_seq', ?)`, [characters[characters.length - 1].id]);
   });
 }
 
@@ -182,14 +166,14 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
 
 module.exports = {
   makeUsersArray,
-  makeThingsArray,
+  makeUserCharactersArray,
   makeExpectedThing,
   makeExpectedThingReviews,
   makeMaliciousThing,
 
-  makeThingsFixtures,
+  makeCharactersFixtures,
   cleanTables,
-  seedThingsTables,
+  seedCharactersTables,
   seedMaliciousThing,
   makeAuthHeader,
   seedUsers
