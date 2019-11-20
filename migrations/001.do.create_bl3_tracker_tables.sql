@@ -96,7 +96,7 @@ CREATE TABLE anointments (
 
 CREATE TABLE prefixes (
   id SERIAL PRIMARY KEY,
-  mfr_id INTEGER REFERENCES manufacturers(id) ON DELETE CASCADE NOT NULL,
+  mfr_id INTEGER REFERENCES manufacturers(id) ON DELETE CASCADE,
   title TEXT NOT NULL
 );
 
