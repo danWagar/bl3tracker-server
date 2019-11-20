@@ -107,6 +107,7 @@ CREATE TABLE user_characters (
   character_name TEXT
 );
 
+
 CREATE TABLE user_weapons (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,

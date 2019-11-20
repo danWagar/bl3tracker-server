@@ -4,13 +4,15 @@ const { requireAuth } = require('../middleware/jwt-auth.js');
 
 const ItemsRouter = express.Router();
 
-ItemsRouter.route('/').get((req, res, next) => {
-  ItemsService.getAllItems(req.app.get('db'))
-    .then(items => {
-      res.json(ItemsService.serializeItems(items));
-    })
-    .catch(next);
-});
+ItemsRouter.route('/')
+  .all(requireAuth)
+  .get((req, res, next) => {
+    ItemsService.getAllItems(req.app.get('db'))
+      .then(items => {
+        res.json(ItemsService.serializeItems(items));
+      })
+      .catch(next);
+  });
 
 ItemsRouter.route('/:thing_id')
   .all(requireAuth)
