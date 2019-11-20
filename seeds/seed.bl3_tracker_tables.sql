@@ -2,8 +2,10 @@ BEGIN;
 
 TRUNCATE
   manufacturers,
-  weapons
+  weapons,
+  prefixes
   RESTART IDENTITY CASCADE;
+
 
 INSERT INTO manufacturers (mfr_name) values
 ('Atlas'),
@@ -278,6 +280,216 @@ select id ,'launcher','Mongol', 'Legendary' from manufacturers where mfr_name li
 INSERT INTO weapons (mfr_id, weapon_type, name, rarity)
 select id ,'sniper','Lyuda', 'Legendary' from manufacturers where mfr_name like 'Vladof';
 
+COMMIT;
 
+BEGIN;
+
+
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Cost-Effective', id FROM manufacturers m WHERE mfr_name ILIKE 'Atlas';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Overencumbered', id FROM manufacturers m WHERE mfr_name ILIKE 'Atlas';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Brr', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Hawt', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Kemik', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Melty', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Moar', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'MOARR', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Pointy', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Stabby', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Zappy', id FROM manufacturers m WHERE mfr_name ILIKE 'COV';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Adapting', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Arctic', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Bladed', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Daunting', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Dauntless', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Decaying', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Disciplined', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'High Capacity', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Reflexive', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Relentless', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Searing', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Shocking', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Tamed', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Trained', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Venomous', id FROM manufacturers m WHERE mfr_name ILIKE 'Dahl';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Auditing', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Bleeding Edge', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Cash-Infused', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Defrauding', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Holistic', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Hostile', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Popular', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Powerhouse', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Redundant', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Undermining', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Viral', id FROM manufacturers m WHERE mfr_name ILIKE 'Hyperion';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Bloodsoaked', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Bowie', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Cuttin''', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Dastardly', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Deadeye', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Quad', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Quickdraw', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Speedloadin''', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Trick', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Wicked', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Binary ', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Expert', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Hazardous', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Mocking', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Stark', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Clearance', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Maxed Out', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Firesale', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Frozen', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Poison', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Precision', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Rad', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Same-Day', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Supercharged', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Turbo', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Burning', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Casual ', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Cocky', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Double Penetrating', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Gratifying', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Itchy', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Nasty', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Oozing', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Packin''', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Shrinking', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Stimulating', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Stuffed', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Triple', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Triple-Penetrating', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Annexed', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Englufing', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Molten', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Negating', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Nuclear', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Otchky', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Pestilent', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Resolute', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Storming', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Unending', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Vicious', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+VALUES ('Bottomless',null);
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Dangerous', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Dueling', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+VALUES ('Express',null);
+INSERT INTO prefixes (title, mfr_id)
+VALUES ('Freezing',null);
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Humongous', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Loaded', id FROM manufacturers m WHERE mfr_name ILIKE 'Jakobs';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Loyal', id FROM manufacturers m WHERE mfr_name ILIKE 'Vladof';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Shredded', id FROM manufacturers m WHERE mfr_name ILIKE 'Torgue';
+INSERT INTO prefixes (title, mfr_id)
+VALUES ('Wunderkind',null);
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Compressing', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Delux', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Super', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Abundant', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Compressing', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
+INSERT INTO prefixes (title, mfr_id)
+SELECT 'Deluxe', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
 
 COMMIT;
