@@ -5,10 +5,11 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
-const itemsRouter = require('./items/items-router');
+const weaponsRouter = require('./weapons/weapons-router');
 const authRouter = require('./auth/auth-router');
 const usersRouter = require('./users/users-router');
 const charactersRouter = require('./characters/characters-router');
+const anointmentsRouter = require('./anointments/anointments-router');
 
 const app = express();
 
@@ -20,10 +21,11 @@ app.use(
 app.use(cors());
 app.use(helmet());
 
-app.use('/api/items', itemsRouter);
+app.use('/api/weapons', weaponsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/characters', charactersRouter);
+app.use('/api/anointments', anointmentsRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;

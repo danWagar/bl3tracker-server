@@ -91,7 +91,7 @@ CREATE TABLE users (
 CREATE TABLE anointments (
   id SERIAL PRIMARY KEY,
   class char_class NOT NULL,
-  description TEXT NOT NULL
+  description varchar() NOT NULL
 );
 
 CREATE TABLE prefixes (

@@ -3,7 +3,8 @@ BEGIN;
 TRUNCATE
   manufacturers,
   weapons,
-  prefixes
+  prefixes,
+  anointments
   RESTART IDENTITY CASCADE;
 
 
@@ -491,5 +492,158 @@ INSERT INTO prefixes (title, mfr_id)
 SELECT 'Compressing', id FROM manufacturers m WHERE mfr_name ILIKE 'Maliwan';
 INSERT INTO prefixes (title, mfr_id)
 SELECT 'Deluxe', id FROM manufacturers m WHERE mfr_name ILIKE 'Tediore';
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, The next 2 magazines will have 50% additional bonus fire damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, The next 2 magazines will have 50% additional bonus shock damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, The next 2 magazines will have 50% additional bonus corrosive damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, The next 2 magazines will have 50% additional bonus cryo damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, The next 2 magazines will have 50% additional bonus radiation damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Weapon Status Effect Damage & Chance are increased by 75% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Splash Damage is increased by 125% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Weapon Damage is increased by 100% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Deal 125% more Weapon Damage to Badass, Named, and Boss enemies for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Melee Damage is increased by 100% for a short time. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Critical Damage is increased by 25% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Gain 15% Life Steal for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Regenerate 5% max health per second for a short time. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Damage taken is reduced by 13% for a short time. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Weapon Accuracy & Handling are greatly increased for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Projectile Speed is increased by 100% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Movement speed is increased by 5% for a short time. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Fire rate is increased by 11%, & reload speed by 26% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, Action skill cooldown rate is increased by 20% for a short time. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill Start, Regenerate 1 grenade. [grenade]');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'On Action Skill End, deal 20% bonus radiation damage for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'On Action Skill End, 30% of damage taken is returned to the attacker for a short time. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'After using Phasecast, Weapon Damage is increased by 250% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'After using Phasecast, Status Effect Chance is increased by 50% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'After using Phaseslam, Weapon Damage is increased by 300% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'After using Phaseslam, Melee Damage is increased by 200% for a short time. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'While Phasegrasp is active, Amara constantly triggers novas that deal 3718 damage. (lvl 50) [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'While Phasegrasp is active, Weapon charge time is decreased by 71% and Fire Rate is increased by 12%.');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'After using Phaseslam, damage taken is reduced by 20% and movespeed is increased by 12%. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'After using Phasegrasp, Weapon Accuracy and Handling are greatly increased.');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'After using Rakk Attack!, gain 25% critical hit damage for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'Enemies damaged by Rakk Attack! take 50% increased damage for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'Grants an extra charge of Rakk Attack!');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'When exiting Fade Away, create a nova that deals 13013 damage. (lvl 50)');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'While Gamma Burst is active, gain 65% bonus radiation damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'After using Attack Command, gain 30% lifesteal for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'After issuing an Attack Command, gain 8% Movement Speed for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'While Fade Away is active, gain greatly increased Accuracy and Handling.');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'When entering and exiting Iron Bear, create a nova that deals 13013 damage. (lvl50)');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'After exiting Iron Bear, the next 2 magazines will have 10% increased fire rate and 20% critical damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'After exiting Iron Bear, the next 2 magazines will have 40% bonus incendiary damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'After exiting Iron Bear, gain 120% increased Splash damage for 18 seconds.');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'While Auto Bear is active, deals 20% bonus incendiary damage');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'While Auto Bear is active, taking damage has 20% chance to spawn a grenade. [grenade]');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'After exiting Iron Bear, gain 75% increased shields and health for 25 seconds. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'After exiting Iron Bear, the next 3 magazines will have 33% incrased reload speed and 67% increased handling');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'After exiting Iron Bear, kills increase Iron Bear''s cooldown rate by 30%. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'After exiting Iron Bear, do not consume ammo for 5 seconds.');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'While Auto Bear is active, constantly regenerate 8% of magazine size per second. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'After swapping places with your Digi-Clone, Weapon Damage is increased by 75% for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'While Barrier is active, Status Effect Chance is increased by 50%');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'While Barrier is active, Accuracy is increased by 60%, and Critical Hit damage is increased by 30%');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'While SNTNL is active, Gain 50% of damage as bonus Cryo damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'When Barrier is Deployed, instantly start recharging your shields. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'While Digi-Clone is active, regenerate 3% max health per second. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'While SNTNL is active, Fire Rate is increased by 9% and Reload Speed by 23%.');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'While SNTNL is active, Movespeed is increased by 15%. [shield]');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'After swapping places with your Digi-Clone, your weapon is reloaded.');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'While Digi-Clone is active, regenerate 12% of magazine ammo per second.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'While Terrified, gain increased crit damage. The more Terror you have, the higher the bonus.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'While Terrified, gain increased damage and fire rate. The more Terror you have, the higher the bonus.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'While Terrified, gain ammo regeneration. The more Terror you have, the higher the bonus. ');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'While Terrified, gain health regeneration. The more Teror you have, the higher the bonus.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'While Terrified, deal 50% bonus cryo damage.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'While Terrified, you have a chance to fire an extra projectile per shot. The more Terror you have, the higher the bonus.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'While Terrified, enemy bullets have a chance to reflect off of you. The more Terror you have, the higher the bonus.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'While Terrified, reduce all incoming damage by a small amount. The more Terror you have, the higher the bonus.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, heal 25% max health, effect is increased by 15% per terror stack. Consumes all Terror. ');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'On Action Skill End, apply Terror to yourself every 5 seconds for the next 18 seconds.');
+INSERT INTO anointments (class, description) 
+VALUES ('Universal', 'Melee Attacks have a 25% chance to apply Terror to yourself.');
+INSERT INTO anointments (class, description) 
+VALUES ('Siren', 'After Phasegrasping an enemy, Amara fires Terror skulls at the grasped target dealing 3718 damage. (lvl 50)');
+INSERT INTO anointments (class, description) 
+VALUES ('Beastmaster', 'After Using Attack Command, consume all Terror and Fl4K''s Pet gains 50% bonus fire damage for a short time.');
+INSERT INTO anointments (class, description) 
+VALUES ('Operative', 'While SNTNL is active, SNTNL gains 100% lifesteal while you are affected by Terror. ');
+INSERT INTO anointments (class, description) 
+VALUES ('Gunner', 'After Reloading, consume all Terror and create a nova that deals cryo damage.');
 
 COMMIT;

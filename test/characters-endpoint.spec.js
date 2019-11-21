@@ -8,9 +8,6 @@ describe('Characters Endpoints', function() {
 
   const { testUsers, testUserCharacters } = helpers.makeCharactersFixtures();
 
-  console.log(testUsers);
-  console.log(testUserCharacters);
-
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
@@ -25,9 +22,7 @@ describe('Characters Endpoints', function() {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  after('disconnect from db', () => db.destroy());
-
-  describe.only(`GET /api/characters`, () => {
+  describe(`GET /api/characters`, () => {
     beforeEach(() => helpers.seedCharactersTables(db, testUsers, testUserCharacters));
 
     context(`Given there is character data`, () => {
@@ -40,7 +35,7 @@ describe('Characters Endpoints', function() {
     });
   });
 
-  describe.only(`POST /api/characters`, () => {
+  describe(`POST /api/characters`, () => {
     beforeEach(() => helpers.seedCharactersTables(db, testUsers, testUserCharacters));
 
     const newChar = {
