@@ -7,7 +7,8 @@ const CharactersService = {
     return db
       .select('id', 'user_id', 'character', 'character_name')
       .from('user_characters')
-      .where('user_id', user_id);
+      .where('user_id', user_id)
+      .orderBy('id');
   },
 
   getById(db, char_id, user_id) {
