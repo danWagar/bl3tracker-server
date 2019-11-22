@@ -10,6 +10,7 @@ const authRouter = require('./auth/auth-router');
 const usersRouter = require('./users/users-router');
 const charactersRouter = require('./characters/characters-router');
 const anointmentsRouter = require('./anointments/anointments-router');
+const inventoryRouter = require('./inventory/inventory-router');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/characters', charactersRouter);
 app.use('/api/anointments', anointmentsRouter);
+app.use('/api/inventory', inventoryRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;

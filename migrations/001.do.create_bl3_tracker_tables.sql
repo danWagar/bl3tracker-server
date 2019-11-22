@@ -91,7 +91,7 @@ CREATE TABLE users (
 CREATE TABLE anointments (
   id SERIAL PRIMARY KEY,
   class char_class NOT NULL,
-  description varchar() NOT NULL
+  description varchar(500) NOT NULL
 );
 
 CREATE TABLE prefixes (
@@ -112,10 +112,16 @@ CREATE TABLE user_weapons (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
   char_id INTEGER REFERENCES user_characters(id) ON DELETE SET NULL,
-  item_id INTEGER REFERENCES weapons(id) ON DELETE CASCADE NOT NULL,
+  weapon_id INTEGER REFERENCES weapons(id) ON DELETE CASCADE NOT NULL,
   prefix_1 INTEGER REFERENCES prefixes(id) ON DELETE SET NULL,
   prefix_2 INTEGER REFERENCES prefixes(id) ON DELETE SET NULL,
   element elmnt,
   anointment_id INTEGER REFERENCES anointments(id) ON DELETE SET NULL,
-  item_score INTEGER, CHECK(item_score <= 621)
+  item_score INTEGER, CHECK(item_score <= 621),
+  damage VARCHAR(7),
+  accuracy INTEGER, CHECK(accuracy <= 100),
+  handling INTEGER, CHECK(handling <= 100),
+  reload_time DECIMAL(3,1),
+  fire_rate DECIMAL(4,2),
+  magazine_size INTEGER, CHECK(magazine_size <= 999)
 );

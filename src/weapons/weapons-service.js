@@ -18,11 +18,13 @@ const WeaponsService = {
 
   //select mfr_name, title from prefixes join manufacturers m on mfr_id = m.id where mfr_name ilike 'atlas';
   getPrevixesByMfr(db, id) {
-    return db
-      .select('mfr_name', 'title')
-      .from('prefixes')
-      .join('manufacturers as m', 'm.id', 'mfr_id')
-      .where('m.id', id);
+    return (
+      db
+        .select('mfr_id', 'title')
+        .from('prefixes')
+        //.join('manufacturers as m', 'm.id', 'mfr_id')
+        .where('mfr_id', id)
+    );
   },
 
   serializeWeapons(weapons) {
