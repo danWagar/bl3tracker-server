@@ -160,6 +160,8 @@ CREATE TABLE user_shields (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
   char_id INTEGER REFERENCES user_characters(id) ON DELETE CASCADE NOT NULL,
   shield_id INTEGER REFERENCES shields(id) ON DELETE CASCADE NOT NULL,
+  anointment_id INTEGER REFERENCES anointments(id) ON DELETE SET NULL,
+  item_score INTEGER, CHECK(item_score <= 621),
   prefix shld_prefix,
   element elmnt,
   capacity INTEGER,

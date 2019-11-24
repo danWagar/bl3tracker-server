@@ -10,15 +10,6 @@ const inventoryRouter = express.Router();
 inventoryRouter
   .route('/weapons')
   .all(requireAuth)
-  /*.get((req, res, next) => {
-    InventoryService.getAllWeaponInventory(req.app.get('db'), req.user.id)
-      .then(inv => {
-        res.json(InventoryService.serializeInventory(inv));
-      })
-      .catch(next);
-  })
-  
-  */
   .post(bodyParser, (req, res, next) => {
     const {
       char_id,
@@ -52,9 +43,7 @@ inventoryRouter
       magazine_size
     };
 
-    const required = {
-      weapon_id
-    };
+    const required = { char_id, weapon_id };
 
     for (const [key, value] of Object.entries(required))
       if (value == null)
@@ -81,6 +70,66 @@ inventoryRouter
     InventoryService.getCharacterWeaponInventory(req.app.get('db'), req.user.id, req.params.char_id)
       .then(weapons => {
         res.json(InventoryService.serializeWeapons(weapons));
+      })
+      .catch(next);
+  });
+
+inventoryRouter
+  .route('/shields')
+  .all(requireAuth)
+  .post(bodyParser, (req, res, next) => {
+    console.log('inserting shield ', req.body);
+    const {
+      char_id,
+      shield_id,
+      prefix,
+      element,
+      anointment_id,
+      item_score,
+      capacity,
+      recharge_delay,
+      recharge_rate
+    } = req.body;
+
+    const newShield = {
+      char_id,
+      shield_id,
+      prefix,
+      element,
+      anointment_id,
+      item_score,
+      capacity,
+      recharge_delay,
+      recharge_rate
+    };
+
+    const required = { char_id, shield_id };
+
+    for (const [key, value] of Object.entries(required))
+      if (value == null)
+        return res.status(400).json({
+          error: `Missing '${key}' in request body`
+        });
+
+    newShield.user_id = req.user.id;
+
+    InventoryService.insertShield(req.app.get('db'), newShield)
+      .then(shield => {
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `/${shield[0].id}`))
+          .json(InventoryService.serializeShield(shield[0]));
+      })
+      .catch(next);
+  });
+
+inventoryRouter
+  .route('/shields/:char_id')
+  .all(requireAuth)
+  .get((req, res, next) => {
+    InventoryService.getCharacterShieldInventory(req.app.get('db'), req.user.id, req.params.char_id)
+      .then(shields => {
+        res.json(InventoryService.serializeWeapons(shields));
       })
       .catch(next);
   });
