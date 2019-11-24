@@ -1,4 +1,4 @@
-# Thingful Server
+# Borderlands 3 Gear Tracker Server
 
 ## Setting Up
 
