@@ -10,19 +10,45 @@ TRUNCATE
 
 
 INSERT INTO manufacturers (mfr_name) values
-('Anshin'),
 ('Atlas'),
 ('COV'),
 ('DAHL'),
 ('Hyperion'),
 ('Jakobs'),
 ('Maliwan'),
-('Pangolin'),
 ('Tediore'),
 ('TORGUE'),
-('Vladof');
+('Vladof'),
+('Anshin'),
+('Pangolin');
+
 
 COMMIT;
+
+BEGIN;
+
+INSERT INTO artifacts (name, rarity) VALUES
+('Cosmic Crater', 'Legendary'),
+('Deathless', 'Legendary'),
+('Electric Banjo', 'Legendary'),
+('Grave', 'Legendary'),
+('Launch Pad', 'Legendary'),
+('Loaded Dice', 'Legendary'),
+('Moxxi''s Endowment', 'Legendary'),
+('Otto Idol', 'Legendary'),
+('Phoenix Tears', 'Legendary'),
+('Planetoid', 'Legendary'),
+('Pull Out Method', 'Legendary'),
+('Rocket Boots', 'Legendary'),
+('Safegaurd', 'Legendary'),
+('Splatter Gun', 'Legendary'),
+('Static Charge', 'Legendary'),
+('Unleash the Dragon', 'Legendary'),
+('Victory Rush', 'Legendary'),
+('White Elephant', 'Legendary');
+
+COMMIT;
+
 
 BEGIN;
 

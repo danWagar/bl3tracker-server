@@ -41,7 +41,7 @@ const InventoryService = {
       .where({ user_id: user_id, char_id: char_id });
   },
 
-  getById(db, char_id, user_id, id) {
+  getWeaponById(db, char_id, user_id, id) {
     return db
       .select(
         'char_id',
@@ -71,14 +71,12 @@ const InventoryService = {
   },
 
   insertWeapon(db, weapon) {
-    console.log('inserting weapon ', weapon);
-    console.log('user_id type is ' + typeof weapon.user_id);
     return db
       .insert(weapon)
       .into('user_weapons')
       .returning('*')
       .then(([weapon]) => weapon)
-      .then(weapon => InventoryService.getById(db, weapon.char_id, weapon.user_id, weapon.id));
+      .then(weapon => InventoryService.getWeaponById(db, weapon.char_id, weapon.user_id, weapon.id));
   },
 
   serializeWeapons(weapons) {
@@ -113,6 +111,86 @@ const InventoryService = {
       reload_time: xss(weaponData.reload_time),
       fire_rate: xss(weaponData.fire_rate),
       magazine_size: xss(weaponData.magazine_size)
+    };
+  },
+
+  getCharacterShieldInventory(db, user_id, char_id) {
+    return db
+      .select(
+        'mfr_name',
+        'name',
+        'rarity',
+        'prefix',
+        'element',
+        'description as anointment',
+        'item_score',
+        'capacity',
+        'recharge_delay',
+        'recharge_rate'
+      )
+      .from('user_shields')
+      .join('shields as s', 'shield_id', '=', 's.id')
+      .join('manufacturers as m', 's.mfr_id', '=', 'm.id')
+      .leftJoin('anointments as a', 'anointment_id', '=', 'a.id')
+      .where({ user_id: user_id, char_id: char_id });
+  },
+
+  getShieldById(db, char_id, user_id, id) {
+    return db
+      .select(
+        'char_id',
+        'mfr_name',
+        'name',
+        'rarity',
+        'prefix',
+        'element',
+        'description as anointment',
+        'item_score',
+        'capacity',
+        'recharge_delay',
+        'recharge_rate'
+      )
+      .from('user_shields as u')
+      .join('shields as s', 'u.shield_id', '=', 's.id')
+      .join('manufacturers as m', 's.mfr_id', '=', 'm.id')
+      .leftJoin('anointments as a', 'u.anointment_id', '=', 'a.id')
+      .where(qb => qb.where({ user_id: user_id, char_id: char_id }).andWhere('u.id', id));
+  },
+
+  insertShield(db, shield) {
+    return db
+      .insert(shield)
+      .into('user_shields')
+      .returning('*')
+      .then(([shield]) => shield)
+      .then(shield => InventoryService.getShieldById(db, shield.char_id, shield.user_id, shield.id));
+  },
+
+  serializeShields(shields) {
+    return shields.map(this.serializeShield);
+  },
+
+  serializeShield(shield) {
+    const shieldTree = new Treeize();
+
+    const shieldData = shieldTree.grow([shield]).getData()[0];
+
+    return {
+      mfr_name: shieldData.mfr_name,
+      name: shieldData.name,
+      rarity: shieldData.rarity,
+      id: shieldData.id,
+      user_id: shieldData.user_id,
+      char_id: shieldData.char_id,
+      shield_id: shieldData.shield_id,
+      prefix: shieldData.prefix,
+      element: shieldData.element,
+      anointment: shieldData.anointment,
+      anointment_id: shieldData.anointment_id,
+      item_score: xss(shieldData.item_score),
+      capacity: xss(shieldData.capacity),
+      recharge_delay: xss(shieldData.recharge_delay),
+      recharge_rate: xss(shieldData.recharge_rate)
     };
   }
 };
