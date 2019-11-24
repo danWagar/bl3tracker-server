@@ -11,6 +11,7 @@ charactersRouter
   .route('/')
   .all(requireAuth)
   .get((req, res, next) => {
+    console.log(req.user.id);
     CharactersService.getAllUserCharacters(req.app.get('db'), req.user.id)
       .then(chars => {
         res.json(CharactersService.serializeCharacters(chars));

@@ -40,6 +40,36 @@ CREATE TYPE elmnt AS ENUM (
   'radiation'
 );
 
+CREATE TYPE shld_prefix AS ENUM(
+  'Absorb',
+  'Adaptive',
+  'Adrenaline',
+  'Amp',
+  'Booster',
+  'Brimming',
+  'Delay',
+  'Fallout',
+  'Fleet',
+  'Fortify Charge',
+  'Health',
+  'Health Charge',
+  'Nova',
+  'Power Charge',
+  'Projected',
+  'Ratch',
+  'Recharge',
+  'Reflect',
+  'Resistant',
+  'Roid',
+  'Run-and-Gun',
+  'Safe-Space',
+  'Spike',
+  'Sucker',
+  'Trigger Happy',
+  'Turtle',
+  'Vagabond'
+);
+
 CREATE TABLE manufacturers (
   id SERIAL PRIMARY KEY,
   mfr_name TEXT NOT NULL
@@ -107,11 +137,10 @@ CREATE TABLE user_characters (
   character_name TEXT
 );
 
-
 CREATE TABLE user_weapons (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
-  char_id INTEGER REFERENCES user_characters(id) ON DELETE SET NULL,
+  char_id INTEGER REFERENCES user_characters(id) ON DELETE CASCADE NOT NULL,
   weapon_id INTEGER REFERENCES weapons(id) ON DELETE CASCADE NOT NULL,
   prefix_1 INTEGER REFERENCES prefixes(id) ON DELETE SET NULL,
   prefix_2 INTEGER REFERENCES prefixes(id) ON DELETE SET NULL,
@@ -124,4 +153,16 @@ CREATE TABLE user_weapons (
   reload_time DECIMAL(3,1),
   fire_rate DECIMAL(4,2),
   magazine_size INTEGER, CHECK(magazine_size <= 999)
+);
+
+CREATE TABLE user_shields (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+  char_id INTEGER REFERENCES user_characters(id) ON DELETE CASCADE NOT NULL,
+  shield_id INTEGER REFERENCES shields(id) ON DELETE CASCADE NOT NULL,
+  prefix shld_prefix,
+  element elmnt,
+  capacity INTEGER,
+  recharge_delay DECIMAL(3,1),
+  recharge_rate INTEGER
 );

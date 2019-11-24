@@ -3,18 +3,21 @@ BEGIN;
 TRUNCATE
   manufacturers,
   weapons,
+  shields,
   prefixes,
   anointments
   RESTART IDENTITY CASCADE;
 
 
 INSERT INTO manufacturers (mfr_name) values
+('Anshin'),
 ('Atlas'),
 ('COV'),
 ('DAHL'),
 ('Hyperion'),
 ('Jakobs'),
 ('Maliwan'),
+('Pangolin'),
 ('Tediore'),
 ('TORGUE'),
 ('Vladof');
@@ -280,6 +283,55 @@ INSERT INTO weapons (mfr_id, weapon_type, name, rarity)
 select id ,'launcher','Mongol', 'Legendary' from manufacturers where mfr_name like 'Vladof';
 INSERT INTO weapons (mfr_id, weapon_type, name, rarity)
 select id ,'sniper','Lyuda', 'Legendary' from manufacturers where mfr_name like 'Vladof';
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Deluxe Badass Combustor', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Frozen Heart', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Messy Breakup', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Nova Berner', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Red Card', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Re-Router', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Resonant Back Ham', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Rough Rider', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Scream of Terror', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Whiskey Tango Foxtrot', 'Legendary' from manufacturers where mfr_name like 'Anshin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Black Hole', 'Legendary' from manufacturers where mfr_name like 'Pangolin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Band of Sitorak', 'Legendary' from manufacturers where mfr_name like 'Pangolin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Big Boom Blaster', 'Legendary' from manufacturers where mfr_name like 'Pangolin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Impaler', 'Legendary' from manufacturers where mfr_name like 'Pangolin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Red Suit', 'Legendary' from manufacturers where mfr_name like 'Pangolin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Shooting Star', 'Legendary' from manufacturers where mfr_name like 'Pangolin';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Front Loader', 'Legendary' from manufacturers where mfr_name like 'Hyperion';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Re-Charger', 'Legendary' from manufacturers where mfr_name like 'Hyperion';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Rectifier', 'Legendary' from manufacturers where mfr_name like 'Hyperion';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Stop-Gap', 'Legendary' from manufacturers where mfr_name like 'Hyperion';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'The Transformer', 'Legendary' from manufacturers where mfr_name like 'Hyperion';
+INSERT INTO shields (mfr_id, name, rarity)
+SELECT id, 'Ward', 'Legendary' from manufacturers where mfr_name like 'Hyperion';
 
 COMMIT;
 
