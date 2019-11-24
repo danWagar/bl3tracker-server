@@ -20,8 +20,8 @@ const InventoryService = {
         'weapon_type',
         'name',
         'rarity',
-        'title as pre_title_1',
-        'title as pre_title_2',
+        'p1.title as pre_title_1',
+        'p2.title as pre_title_2',
         'element',
         'description as anointment',
         'item_score',
@@ -36,15 +36,38 @@ const InventoryService = {
       .join('weapons as w', 'weapon_id', '=', 'w.id')
       .join('manufacturers as m', 'w.mfr_id', '=', 'm.id')
       .leftJoin('anointments as a', 'anointment_id', '=', 'a.id')
-      .leftJoin('prefixes as p', qb => qb.on('prefix_1', '=', 'p.id').orOn('prefix_2', '=', 'p.id'))
+      .leftJoin('prefixes as p1', 'prefix_1', '=', 'p1.id')
+      .leftJoin('prefixes as p2', 'prefix_2', '=', 'p2.id')
       .where({ user_id: user_id, char_id: char_id });
   },
 
   getById(db, char_id, user_id, id) {
     return db
-      .select('*')
-      .from('user_weapons')
-      .where({ user_id: user_id, char_id: char_id, id: id });
+      .select(
+        'char_id',
+        'mfr_name',
+        'weapon_type',
+        'name',
+        'rarity',
+        'p1.title as pre_title_1',
+        'p2.title as pre_title_2',
+        'element',
+        'description as anointment',
+        'item_score',
+        'damage',
+        'accuracy',
+        'handling',
+        'reload_time',
+        'fire_rate',
+        'magazine_size'
+      )
+      .from('user_weapons as u')
+      .join('weapons as w', 'u.weapon_id', '=', 'w.id')
+      .join('manufacturers as m', 'w.mfr_id', '=', 'm.id')
+      .leftJoin('anointments as a', 'u.anointment_id', '=', 'a.id')
+      .leftJoin('prefixes as p1', 'prefix_1', '=', 'p1.id')
+      .leftJoin('prefixes as p2', 'prefix_2', '=', 'p2.id')
+      .where(qb => qb.where({ user_id: user_id, char_id: char_id }).andWhere('u.id', id));
   },
 
   insertWeapon(db, weapon) {
@@ -68,13 +91,20 @@ const InventoryService = {
     const weaponData = weaponTree.grow([weapon]).getData()[0];
 
     return {
+      mfr_name: weaponData.mfr_name,
+      weapon_type: weaponData.weapon_type,
+      name: weaponData.name,
+      rarity: weaponData.rarity,
       id: weaponData.id,
       user_id: weaponData.user_id,
       char_id: weaponData.char_id,
       weapon_id: weaponData.weapon_id,
-      prefix_1: xss(weaponData.prefix_1),
-      prefix_2: xss(weaponData.prefix_2),
+      pre_title_1: weaponData.pre_title_1,
+      pre_title_2: weaponData.pre_title_2,
+      prefix_1: weaponData.prefix_1,
+      prefix_2: weaponData.prefix_2,
       element: weaponData.element,
+      anointment: weaponData.anointment,
       anointment_id: weaponData.anointment_id,
       item_score: xss(weaponData.item_score),
       damage: xss(weaponData.damage),
