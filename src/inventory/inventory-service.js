@@ -3,27 +3,39 @@ const xss = require('xss');
 const Treeize = require('treeize');
 
 const InventoryService = {
-  /* select mfr_name, weapon_type, name, rarity, title as pre_title_1, 
- title as pre_title_2, element, description as anointment, item_score,
- damage, accuracy, handling, reload_time, fire_rate, magazine_size
- from user_weapons
- join weapons w on weapon_id = w.id
- join manufacturers m on w.mfr_id = m.id
- left join anointments a on anointment_id = a.id
- left join prefixes p on prefix_1 = p.id or prefix_2 = p.id
- where user_id = ? and char_id = ?;
- */
+  /*   id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+  char_id INTEGER REFERENCES user_characters(id) ON DELETE CASCADE NOT NULL,
+  weapon_id INTEGER REFERENCES weapons(id) ON DELETE CASCADE NOT NULL,
+  prefix_1 INTEGER REFERENCES prefixes(id) ON DELETE SET NULL,
+  prefix_2 INTEGER REFERENCES prefixes(id) ON DELETE SET NULL,
+  element elmnt,
+  anointment_id INTEGER REFERENCES anointments(id) ON DELETE SET NULL,
+  item_score INTEGER, CHECK(item_score <= 621),
+  damage VARCHAR(7),
+  accuracy INTEGER, CHECK(accuracy <= 100),
+  handling INTEGER, CHECK(handling <= 100),
+  reload_time DECIMAL(3,1),
+  fire_rate DECIMAL(4,2),
+  magazine_size INTEGER, CHECK(magazine_size <= 999)
+  */
   getCharacterWeaponInventory(db, user_id, char_id) {
     return db
       .select(
         'u.id as user_weapon_id',
+        'char_id',
+        'weapon_id',
+        'm.id as mfr_id',
         'mfr_name',
         'weapon_type',
         'name',
         'rarity',
+        'prefix_1',
+        'prefix_2',
         'p1.title as pre_title_1',
         'p2.title as pre_title_2',
         'element',
+        'anointment_id',
         'description as anointment',
         'item_score',
         'damage',
@@ -47,13 +59,18 @@ const InventoryService = {
       .select(
         'u.id as user_weapon_id',
         'char_id',
+        'weapon_id',
+        'm.id as mfr_id',
         'mfr_name',
         'weapon_type',
         'name',
         'rarity',
+        'prefix_1',
+        'prefix_2',
         'p1.title as pre_title_1',
         'p2.title as pre_title_2',
         'element',
+        'anointment_id',
         'description as anointment',
         'item_score',
         'damage',
@@ -69,7 +86,8 @@ const InventoryService = {
       .leftJoin('anointments as a', 'u.anointment_id', '=', 'a.id')
       .leftJoin('prefixes as p1', 'prefix_1', '=', 'p1.id')
       .leftJoin('prefixes as p2', 'prefix_2', '=', 'p2.id')
-      .where('u.id', id);
+      .where('u.id', id)
+      .first();
   },
 
   getWeaponById(db, id) {
@@ -85,17 +103,16 @@ const InventoryService = {
       .into('user_weapons')
       .returning('*')
       .then(([weapon]) => {
-        console.log(weapon);
         return weapon;
       })
       .then(weapon => InventoryService.getParsedWeaponById(db, weapon.id));
   },
 
   updateWeapon(db, id, toUpdate) {
-    console.log(toUpdate);
     return db('user_weapons')
       .update(toUpdate)
-      .where({ id: id });
+      .where({ id: id })
+      .then(() => InventoryService.getParsedWeaponById(db, id));
   },
 
   deleteWeapon(db, id) {
@@ -115,6 +132,7 @@ const InventoryService = {
 
     return {
       user_weapon_id: weaponData.user_weapon_id,
+      mfr_id: weaponData.mfr_id,
       mfr_name: weaponData.mfr_name,
       weapon_type: weaponData.weapon_type,
       name: weaponData.name,

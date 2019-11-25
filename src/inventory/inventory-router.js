@@ -63,6 +63,20 @@ inventoryRouter
       .catch(next);
   });
 
+/*
+inventoryRouter
+  .route('/weapon/:id')
+  .all(requireAuth)
+  .get((req, res, next) => {
+    InventoryService.getParsedWeaponById(req.app.get('db'), req.params.id)
+      .then(wpn => {
+        console.log(wpn);
+        res.json(InventoryService.serializeWeapon(wpn));
+      })
+      .catch(next);
+  });
+  */
+
 //Here param id is oveloaded, for get it refers to char_id, otherwise it refers
 //to id of user_weapons
 inventoryRouter
@@ -87,7 +101,10 @@ inventoryRouter
   })
   .patch(bodyParser, (req, res, next) => {
     InventoryService.updateWeapon(req.app.get('db'), req.params.id, req.body)
-      .then(() => res.status(204).end())
+      .then(wpn => {
+        console.log(wpn);
+        res.json(InventoryService.serializeWeapon(wpn));
+      })
       .catch(next);
   })
   .delete((req, res, next) => {
