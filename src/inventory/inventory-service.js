@@ -16,6 +16,7 @@ const InventoryService = {
   getCharacterWeaponInventory(db, user_id, char_id) {
     return db
       .select(
+        'u.id as user_weapon_id',
         'mfr_name',
         'weapon_type',
         'name',
@@ -32,18 +33,19 @@ const InventoryService = {
         'fire_rate',
         'magazine_size'
       )
-      .from('user_weapons')
-      .join('weapons as w', 'weapon_id', '=', 'w.id')
+      .from('user_weapons as u')
+      .join('weapons as w', 'u.weapon_id', '=', 'w.id')
       .join('manufacturers as m', 'w.mfr_id', '=', 'm.id')
-      .leftJoin('anointments as a', 'anointment_id', '=', 'a.id')
-      .leftJoin('prefixes as p1', 'prefix_1', '=', 'p1.id')
-      .leftJoin('prefixes as p2', 'prefix_2', '=', 'p2.id')
+      .leftJoin('anointments as a', 'u.anointment_id', '=', 'a.id')
+      .leftJoin('prefixes as p1', 'u.prefix_1', '=', 'p1.id')
+      .leftJoin('prefixes as p2', 'u.prefix_2', '=', 'p2.id')
       .where({ user_id: user_id, char_id: char_id });
   },
 
-  getWeaponById(db, char_id, user_id, id) {
+  getParsedWeaponById(db, id) {
     return db
       .select(
+        'u.id as user_weapon_id',
         'char_id',
         'mfr_name',
         'weapon_type',
@@ -67,7 +69,14 @@ const InventoryService = {
       .leftJoin('anointments as a', 'u.anointment_id', '=', 'a.id')
       .leftJoin('prefixes as p1', 'prefix_1', '=', 'p1.id')
       .leftJoin('prefixes as p2', 'prefix_2', '=', 'p2.id')
-      .where(qb => qb.where({ user_id: user_id, char_id: char_id }).andWhere('u.id', id));
+      .where('u.id', id);
+  },
+
+  getWeaponById(db, id) {
+    return db
+      .select('*')
+      .from('user_weapons')
+      .where({ id: id });
   },
 
   insertWeapon(db, weapon) {
@@ -75,8 +84,24 @@ const InventoryService = {
       .insert(weapon)
       .into('user_weapons')
       .returning('*')
-      .then(([weapon]) => weapon)
-      .then(weapon => InventoryService.getWeaponById(db, weapon.char_id, weapon.user_id, weapon.id));
+      .then(([weapon]) => {
+        console.log(weapon);
+        return weapon;
+      })
+      .then(weapon => InventoryService.getParsedWeaponById(db, weapon.id));
+  },
+
+  updateWeapon(db, id, toUpdate) {
+    console.log(toUpdate);
+    return db('user_weapons')
+      .update(toUpdate)
+      .where({ id: id });
+  },
+
+  deleteWeapon(db, id) {
+    return db('user_weapons')
+      .del()
+      .where({ id: id });
   },
 
   serializeWeapons(weapons) {
@@ -89,6 +114,7 @@ const InventoryService = {
     const weaponData = weaponTree.grow([weapon]).getData()[0];
 
     return {
+      user_weapon_id: weaponData.user_weapon_id,
       mfr_name: weaponData.mfr_name,
       weapon_type: weaponData.weapon_type,
       name: weaponData.name,
@@ -117,6 +143,7 @@ const InventoryService = {
   getCharacterShieldInventory(db, user_id, char_id) {
     return db
       .select(
+        'u.id as user_shield_id',
         'mfr_name',
         'name',
         'rarity',
@@ -128,16 +155,17 @@ const InventoryService = {
         'recharge_delay',
         'recharge_rate'
       )
-      .from('user_shields')
-      .join('shields as s', 'shield_id', '=', 's.id')
+      .from('user_shields as u')
+      .join('shields as s', 'u.shield_id', '=', 's.id')
       .join('manufacturers as m', 's.mfr_id', '=', 'm.id')
-      .leftJoin('anointments as a', 'anointment_id', '=', 'a.id')
+      .leftJoin('anointments as a', 'u.anointment_id', '=', 'a.id')
       .where({ user_id: user_id, char_id: char_id });
   },
 
-  getShieldById(db, char_id, user_id, id) {
+  getParsedShieldById(db, id) {
     return db
       .select(
+        'u.id as user_shield_id',
         'char_id',
         'mfr_name',
         'name',
@@ -154,7 +182,14 @@ const InventoryService = {
       .join('shields as s', 'u.shield_id', '=', 's.id')
       .join('manufacturers as m', 's.mfr_id', '=', 'm.id')
       .leftJoin('anointments as a', 'u.anointment_id', '=', 'a.id')
-      .where(qb => qb.where({ user_id: user_id, char_id: char_id }).andWhere('u.id', id));
+      .where('u.id', id);
+  },
+
+  getShieldById(db, id) {
+    return db
+      .select('*')
+      .from('user_shields')
+      .where({ id: id });
   },
 
   insertShield(db, shield) {
@@ -163,7 +198,19 @@ const InventoryService = {
       .into('user_shields')
       .returning('*')
       .then(([shield]) => shield)
-      .then(shield => InventoryService.getShieldById(db, shield.char_id, shield.user_id, shield.id));
+      .then(shield => InventoryService.getParsedShieldById(db, shield.id));
+  },
+
+  updateShield(db, id, toUpdate) {
+    return db('user_shields')
+      .update(toUpdate)
+      .where({ id: id });
+  },
+
+  deleteShield(db, id) {
+    return db('user_shields')
+      .del()
+      .where({ id: id });
   },
 
   serializeShields(shields) {
@@ -176,6 +223,7 @@ const InventoryService = {
     const shieldData = shieldTree.grow([shield]).getData()[0];
 
     return {
+      user_shield_id: shieldData.user_shield_id,
       mfr_name: shieldData.mfr_name,
       name: shieldData.name,
       rarity: shieldData.rarity,

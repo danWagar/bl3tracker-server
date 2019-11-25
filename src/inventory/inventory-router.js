@@ -63,14 +63,36 @@ inventoryRouter
       .catch(next);
   });
 
+//Here param id is oveloaded, for get it refers to char_id, otherwise it refers
+//to id of user_weapons
 inventoryRouter
-  .route('/weapons/:char_id')
+  .route('/weapons/:id')
   .all(requireAuth)
   .get((req, res, next) => {
-    InventoryService.getCharacterWeaponInventory(req.app.get('db'), req.user.id, req.params.char_id)
+    InventoryService.getCharacterWeaponInventory(req.app.get('db'), req.user.id, req.params.id)
       .then(weapons => {
         res.json(InventoryService.serializeWeapons(weapons));
       })
+      .catch(next);
+  })
+  .all((req, res, next) => {
+    InventoryService.getWeaponById(req.app.get('db'), req.params.id)
+      .then(wpn => {
+        if (!wpn) return res.status(404).json({ errors: { message: 'Weapon does not exist' } });
+
+        res.weapon = wpn;
+        next();
+      })
+      .catch(next);
+  })
+  .patch(bodyParser, (req, res, next) => {
+    InventoryService.updateWeapon(req.app.get('db'), req.params.id, req.body)
+      .then(() => res.status(204).end())
+      .catch(next);
+  })
+  .delete((req, res, next) => {
+    InventoryService.deleteWeapon(req.app.get('db'), req.params.id)
+      .then(() => res.status(204).end())
       .catch(next);
   });
 
@@ -122,15 +144,36 @@ inventoryRouter
       })
       .catch(next);
   });
-
+//Here param id is oveloaded, for get it refers to char_id, otherwise it refers
+//to id of user_shields
 inventoryRouter
-  .route('/shields/:char_id')
+  .route('/shields/:id')
   .all(requireAuth)
   .get((req, res, next) => {
-    InventoryService.getCharacterShieldInventory(req.app.get('db'), req.user.id, req.params.char_id)
+    InventoryService.getCharacterShieldInventory(req.app.get('db'), req.user.id, req.params.id)
       .then(shields => {
-        res.json(InventoryService.serializeWeapons(shields));
+        res.json(InventoryService.serializeShields(shields));
       })
+      .catch(next);
+  })
+  .all((req, res, next) => {
+    InventoryService.getShieldById(req.app.get('db'), req.params.id)
+      .then(shield => {
+        if (!shield) return res.status(404).json({ errors: { message: 'Shield does not exist' } });
+
+        res.shield = shield;
+        next();
+      })
+      .catch(next);
+  })
+  .patch(bodyParser, (req, res, next) => {
+    InventoryService.updateShield(req.app.get('db'), req.params.id, req.body)
+      .then(() => res.status(204).end())
+      .catch(next);
+  })
+  .delete((req, res, next) => {
+    InventoryService.deleteShield(req.app.get('db'), req.params.id)
+      .then(() => res.status(204).end())
       .catch(next);
   });
 

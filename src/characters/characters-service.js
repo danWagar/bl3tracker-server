@@ -11,7 +11,7 @@ const CharactersService = {
       .orderBy('id');
   },
 
-  getById(db, char_id, user_id) {
+  getCharById(db, char_id, user_id) {
     return db
       .select('*')
       .from('user_characters')
@@ -24,7 +24,19 @@ const CharactersService = {
       .into('user_characters')
       .returning('*')
       .then(([char]) => char)
-      .then(char => CharactersService.getById(db, char.id, char.user_id));
+      .then(char => CharactersService.getCharById(db, char.id, char.user_id));
+  },
+
+  updateCharacter(db, updatedChar) {
+    return db('user_characters')
+      .update({ character_name: updatedChar.character_name })
+      .where({ user_id: updatedChar.user_id, id: updatedChar.id });
+  },
+
+  deleteCharacter(db, user_id, id) {
+    return db('user_characters')
+      .del()
+      .where({ user_id: user_id, id: id });
   },
 
   serializeCharacters(characters) {

@@ -40,4 +40,34 @@ charactersRouter
       .catch(next);
   });
 
+charactersRouter
+  .route('/:id')
+  .all(requireAuth)
+  .all((req, res, next) => {
+    CharactersService.getCharById(req.app.get('db'), req.params.id, req.user.id)
+      .then(char => {
+        if (!char) return res.status(404).json({ errors: { message: 'Character does not exist' } });
+
+        res.character = char;
+        next();
+      })
+      .catch(next);
+  })
+  .patch(bodyParser, (req, res, next) => {
+    const { character_name } = req.body;
+    const id = req.params.id;
+    const updatedChar = { id, character_name };
+
+    updatedChar.user_id = req.user.id;
+
+    CharactersService.updateCharacter(req.app.get('db'), updatedChar)
+      .then(() => res.status(204).end())
+      .catch(next);
+  })
+  .delete((req, res, next) => {
+    CharactersService.deleteCharacter(req.app.get('db'), req.user.id, req.params.id)
+      .then(() => res.status(204).end())
+      .catch(next);
+  });
+
 module.exports = charactersRouter;
