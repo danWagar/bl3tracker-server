@@ -34,7 +34,7 @@ CREATE TYPE rarity_type AS ENUM (
 CREATE TYPE elmnt AS ENUM (
   'normal',
   'fire',
-  'corrosive',{}
+  'corrosive',
   'shock',
   'cryo',
   'radiation'
