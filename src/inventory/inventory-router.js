@@ -53,32 +53,19 @@ inventoryRouter
 
     newWeapon.user_id = req.user.id;
 
+    console.log(newWeapon);
+
     InventoryService.insertWeapon(req.app.get('db'), newWeapon)
       .then(weapon => {
+        console.log(weapon);
         res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${weapon[0].id}`))
-          .json(InventoryService.serializeWeapon(weapon[0]));
+          .location(path.posix.join(req.originalUrl, `/${weapon.user_weapon_id}`))
+          .json(InventoryService.serializeWeapon(weapon));
       })
       .catch(next);
   });
 
-/*
-inventoryRouter
-  .route('/weapon/:id')
-  .all(requireAuth)
-  .get((req, res, next) => {
-    InventoryService.getParsedWeaponById(req.app.get('db'), req.params.id)
-      .then(wpn => {
-        console.log(wpn);
-        res.json(InventoryService.serializeWeapon(wpn));
-      })
-      .catch(next);
-  });
-  */
-
-//Here param id is oveloaded, for get it refers to char_id, otherwise it refers
-//to id of user_weapons
 inventoryRouter
   .route('/weapons/:id')
   .all(requireAuth)

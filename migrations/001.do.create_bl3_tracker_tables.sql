@@ -8,7 +8,7 @@ CREATE TYPE wpn_type AS ENUM (
 );
 
 CREATE TYPE char_type AS ENUM (
-  'Vault',
+  'Bank',
   'FL4K',
   'Zane',
   'Moze',
