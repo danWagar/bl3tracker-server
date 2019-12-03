@@ -39,7 +39,6 @@ const InventoryService = {
   },
 
   getParsedWeaponById(db, id) {
-    console.log('in getParsedWeaponById id is ' + id);
     return db
       .select(
         'u.id as user_weapon_id',

@@ -42,7 +42,6 @@ const UsersService = {
       .returning('*')
       .then(([user]) => user)
       .then(user => {
-        console.log(user);
         return db
           .insert({ user_id: user.id, character: 'Bank', character_name: 'Bank' })
           .into('user_characters')

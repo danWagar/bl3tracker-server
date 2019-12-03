@@ -53,11 +53,8 @@ inventoryRouter
 
     newWeapon.user_id = req.user.id;
 
-    console.log(newWeapon);
-
     InventoryService.insertWeapon(req.app.get('db'), newWeapon)
       .then(weapon => {
-        console.log(weapon);
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${weapon.user_weapon_id}`))
@@ -89,7 +86,6 @@ inventoryRouter
   .patch(bodyParser, (req, res, next) => {
     InventoryService.updateWeapon(req.app.get('db'), req.params.id, req.body)
       .then(wpn => {
-        console.log(wpn);
         res.json(InventoryService.serializeWeapon(wpn));
       })
       .catch(next);
@@ -104,7 +100,6 @@ inventoryRouter
   .route('/shields')
   .all(requireAuth)
   .post(bodyParser, (req, res, next) => {
-    console.log('inserting shield ', req.body);
     const {
       char_id,
       shield_id,

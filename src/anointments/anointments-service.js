@@ -12,7 +12,6 @@ const AnointmentsService = {
         }
       })
       .andWhere(qb => {
-        console.log(query);
         if (query.class) qb.andWhere({ class: query.class });
       });
   }
