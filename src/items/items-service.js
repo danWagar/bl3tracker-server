@@ -9,7 +9,6 @@ const ItemService = {
       .from('weapons as w')
       .join('manufacturers as m', 'm.id', 'w.mfr_id')
       .where(qb => {
-        console.log(query);
         if (query.mfr_id) qb.where('w.mfr_id', '=', query.mfr_id);
         if (query.weapon_type) qb.andWhere('weapon_type', '=', query.weapon_type);
       });
