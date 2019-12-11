@@ -15,13 +15,10 @@ const ItemService = {
   },
 
   getPrevixesByMfr(db, id) {
-    return (
-      db
-        .select('id', 'title')
-        .from('prefixes')
-        //.join('manufacturers as m', 'm.id', 'mfr_id')
-        .where('mfr_id', id)
-    );
+    return db
+      .select('id', 'title')
+      .from('prefixes')
+      .where('mfr_id', id);
   },
 
   serializeWeapons(weapons) {

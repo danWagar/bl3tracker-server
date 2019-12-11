@@ -1,5 +1,9 @@
 # Borderlands 3 Gear Tracker Server
 
+## What is Borderlands 3 Gear Tracker?
+
+Borderlands 3 Gear Tracker is a platform that allows users to track their inventory at any time for all characters as well as the shared 'Vault' inventory, which can not be accomplished in-game in most scenarios
+
 ## Setting Up
 
 - Install dependencies: `npm install`
@@ -13,23 +17,6 @@
 - Bootstrap development database: `npm run migrate`
 - Bootstrap test database: `npm run migrate:test`
 
-### Configuring Postgres
-
-For tests involving time to run properly, your Postgres database must be configured to run in the UTC timezone.
-
-1. Locate the `postgresql.conf` file for your Postgres installation.
-   - OS X, Homebrew: `/usr/local/var/postgres/postgresql.conf`
-2. Uncomment the `timezone` line and set it to `UTC` as follows:
-
-```
-# - Locale and Formatting -
-
-datestyle = 'iso, mdy'
-#intervalstyle = 'postgres'
-timezone = 'UTC'
-#timezone_abbreviations = 'Default'     # Select the set of available time zone
-```
-
 ## Sample Data
 
 - To seed the database for development: `psql -U bl3tracker -d bl3tracker -a -f seeds/seed.bl3tracker_tables.sql`
@@ -39,3 +26,486 @@ timezone = 'UTC'
 
 - Start application for development: `npm run dev`
 - Run tests: `npm test`
+
+## API Overview
+
+```text
+/api
+.
+├── /auth
+│   └── POST
+│       ├── /login
+├── /users
+│   └── POST
+│       └── /
+├── /items
+│   └── GET
+│       ├── /weapons
+|       |    └── /prefixes/:mfr_id
+│       ├── /shields
+├── /characters
+│   └── POST
+│       ├── /
+│   └── GET
+│       ├── /
+│   └── PATCH
+│       ├── /:id
+│   └── DELETE
+│       └── /:id
+├── /anointments
+│   └── GET
+│       ├── /
+├── /inventory
+│   └── POST
+│       └──/weapons
+│   └── GET
+│       └──/weapons/:id
+│       └──/shields/:id
+│   └── PATCH
+│       └──/weapons/:id
+│       └──/shields/:id
+│   └── DELETE
+│       └──/weapons/:id
+│       └──/shields/:id
+```
+
+PATCH `/api/inventory/weapons/:id`
+
+### POST /api/auth/login
+
+```js
+// req.body
+{
+  user_name: String,
+  password: String
+}
+
+// res.body
+{
+  authToken: String
+}
+```
+
+### POST `/api/users/`
+
+```js
+// req.body
+{
+  user_name: String,
+  password: String
+}
+
+// res.body
+{
+  id: userId,
+  user_name: String,
+  date_created: Date
+}
+```
+
+### GET `/api/items/weapons`
+
+```js
+
+// res.body
+{
+      id: weaponId,
+      weapon_type: String,
+      mfr_id: mfrId,
+      mfr_name: String,
+      name: String,
+      rarity: String
+}
+```
+
+### GET `/api/items/weapons/prefixes/:mfr_id`
+
+```js
+
+//req.params
+{
+  mfr_id: mfrId
+}
+
+// res.body
+{
+      id: weaponId,
+      weapon_type: String,
+      mfr_id: mfrId,
+      mfr_name: String,
+      name: String,
+      rarity: String
+}
+```
+
+### GET `/api/items/shields`
+
+```js
+
+// res.body
+{
+  id: shieldId,
+  mfr_id: mfrId,
+  mfr_name: String,
+  name: String,
+  rarity: String
+}
+```
+
+### POST `/api/characters`
+
+```js
+// req.body
+{
+  character: String,
+  character_name: String
+}
+
+// res.body
+{
+  id: charId,
+  user_id: userId,
+  character: String,
+  character_name: String
+}
+```
+
+### GET `/api/characters`
+
+```js
+// res.body
+{
+  id: charId,
+  user_id: userId,
+  character: String,
+  character_name: String
+}
+```
+
+### PATCH `/api/characters/:id`
+
+```js
+//req.params
+{
+  id: charId
+}
+
+//req.body
+{
+  character_name: String
+}
+
+// res.body
+{
+  id: charId,
+  user_id: userId,
+  character: String,
+  character_name: String
+}
+```
+
+### DELETE `/api/characters/:id`
+
+```js
+//req.params
+{
+  id: charId;
+}
+```
+
+### GET `/api/anointments/`
+
+```js
+//req.query
+{
+  terror: Boolean,
+  class: charClass
+}
+
+//req.res
+{
+  id: id,
+  class: String,
+  description: String
+}
+```
+
+### POST `/api/inventory/weapons`
+
+```js
+//req.body
+{
+  char_id: charId,
+  weapon_id: weaponId,
+  prefix_1: String,
+  prefix_2: String,
+  element: String
+  anointment_id: anointmentId,
+  item_score: Number,
+  damage: Number,
+  accuracy: Number,
+  handling: Number,
+  reload_time: Number,
+  fire_rate: Number,
+  magazine_size: Number
+}
+
+//req.res
+{
+  user_weapon_id: weaponId,
+  mfr_id: mfrId,
+  mfr_name: String,
+  weapon_type: String,
+  name: String,
+  rarity: String,
+  id: id,
+  user_id: userId,
+  char_id: charId,
+  weapon_id: weaponId,
+  prefix_1: String,
+  prefix_2: String,
+  element: String,
+  anointment: String,
+  anointment_id: anointmentId,
+  item_score: Number,
+  damage: Number,
+  accuracy: Number,
+  handling: Number,
+  reload_time: Number,
+  fire_rate: Number,
+  magazine_size: Number
+}
+```
+
+### PATCH `/api/inventory/weapons/:id`
+
+```js
+//req.params
+{
+  id: userWeaponId
+}
+
+//req.body
+{
+  weapon_id: weaponId,
+  prefix_1: String,
+  prefix_2: String,
+  element: String
+  anointment_id: anointmentId,
+  item_score: Number,
+  damage: Number,
+  accuracy: Number,
+  handling: Number,
+  reload_time: Number,
+  fire_rate: Number,
+  magazine_size: Number
+}
+
+//req.res
+{
+  user_weapon_id: weaponId,
+  mfr_id: mfrId,
+  mfr_name: String,
+  weapon_type: String,
+  name: String,
+  rarity: String,
+  id: id,
+  user_id: userId,
+  char_id: charId,
+  weapon_id: weaponId,
+  prefix_1: String,
+  prefix_2: String,
+  element: String,
+  anointment: String,
+  anointment_id: anointmentId,
+  item_score: Number,
+  damage: Number,
+  accuracy: Number,
+  handling: Number,
+  reload_time: Number,
+  fire_rate: Number,
+  magazine_size: Number
+}
+```
+
+### DELETE `/api/inventory/weapons/:id`
+
+```js
+//req.params
+{
+  id: userWeaponId;
+}
+```
+
+### GET `/api/inventory/weapons/:id`
+
+```js
+//req.params
+{
+  id: charId
+}
+
+//req.res
+{
+  user_weapon_id: weaponId,
+  mfr_id: mfrId,
+  mfr_name: String,
+  weapon_type: String,
+  name: String,
+  rarity: String,
+  id: id,
+  user_id: userId,
+  char_id: charId,
+  weapon_id: weaponId,
+  prefix_1: String,
+  prefix_2: String,
+  element: String,
+  anointment: String,
+  anointment_id: anointmentId,
+  item_score: Number,
+  damage: Number,
+  accuracy: Number,
+  handling: Number,
+  reload_time: Number,
+  fire_rate: Number,
+  magazine_size: Number
+}
+```
+
+### POST `/api/inventory/shields`
+
+```js
+//req.body
+{
+  char_id: charId,
+  weapon_id: weaponId,
+  prefix: String,
+  element: String
+  anointment_id: anointmentId,
+  item_score: Number,
+  capacity: Number,
+  recharge_delay: Number,
+  recharge_rate: Number
+}
+
+//req.res
+{
+  user_weapon_id: weaponId,
+  mfr_name: String,
+  name: String,
+  rarity: String,
+  id: id,
+  user_id: userId,
+  char_id: charId,
+  shield_id: weaponId,
+  prefix: String,
+  element: String,
+  anointment: String,
+  anointment_id: anointmentId,
+  item_score: Number,
+  damage: Number,
+  accuracy: Number,
+  handling: Number,
+  capacity: Number,
+  recharge_delay: Number,
+  recharge_rate: Number
+}
+```
+
+### PATCH `/api/inventory/shields/:id`
+
+```js
+//req.params
+{
+  id: userShieldId
+}
+
+//req.body
+{
+  weapon_id: weaponId,
+  prefix: String,
+  element: String
+  anointment_id: anointmentId,
+  item_score: Number,
+  capacity: Number,
+  recharge_delay: Number,
+  recharge_rate: Number
+}
+
+//req.res
+{
+  user_weapon_id: weaponId,
+  mfr_name: String,
+  name: String,
+  rarity: String,
+  id: id,
+  user_id: userId,
+  char_id: charId,
+  shield_id: weaponId,
+  prefix: String,
+  element: String,
+  anointment: String,
+  anointment_id: anointmentId,
+  item_score: Number,
+  damage: Number,
+  accuracy: Number,
+  handling: Number,
+  capacity: Number,
+  recharge_delay: Number,
+  recharge_rate: Number
+}
+```
+
+### DELETE `/api/inventory/shields/:id`
+
+```js
+//req.params
+{
+  id: userShieldId;
+}
+```
+
+### GET `/api/inventory/shields/:id`
+
+```js
+//req.params
+{
+  id: charId
+}
+
+//req.res
+{
+  user_weapon_id: weaponId,
+  mfr_name: String,
+  name: String,
+  rarity: String,
+  id: id,
+  user_id: userId,
+  char_id: charId,
+  shield_id: weaponId,
+  prefix: String,
+  element: String,
+  anointment: String,
+  anointment_id: anointmentId,
+  item_score: Number,
+  damage: Number,
+  accuracy: Number,
+  handling: Number,
+  capacity: Number,
+  recharge_delay: Number,
+  recharge_rate: Number
+}
+```
+
+## Built With
+
+- [Node](https://nodejs.org/en/) - Run-time environment
+- [Express](https://expressjs.com/) - Web application framework
+- [PostgreSQL](https://www.postgresql.org/) - Database
+- [JWT](https://jwt.io/) - Authentication
+- [Mocha](https://mochajs.org/) - Testing
+- [Chai](https://www.chaijs.com/) - Testing
+
+## Author
+
+- **Dan Wagar** - GitHub: [danWagar](https://github.com/danWagar)

@@ -63,6 +63,8 @@ inventoryRouter
       .catch(next);
   });
 
+//Here param id is oveloaded, for get it refers to char_id, otherwise it refers
+//to id of user_weapons
 inventoryRouter
   .route('/weapons/:id')
   .all(requireAuth)
@@ -100,17 +102,7 @@ inventoryRouter
   .route('/shields')
   .all(requireAuth)
   .post(bodyParser, (req, res, next) => {
-    const {
-      char_id,
-      shield_id,
-      prefix,
-      element,
-      anointment_id,
-      item_score,
-      capacity,
-      recharge_delay,
-      recharge_rate
-    } = req.body;
+    const { char_id, shield_id, prefix, element, anointment_id, item_score, us } = req.body;
 
     const newShield = {
       char_id,
