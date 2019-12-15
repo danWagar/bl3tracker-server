@@ -1,6 +1,86 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+function makeCharactersFixtures() {
+  const testUsers = makeUsersArray();
+  const testUserCharacters = makeUserCharactersArray(testUsers);
+  return { testUsers, testUserCharacters };
+}
+
+function makeWeaponsFixtures() {
+  const testUsers = makeUsersArray();
+  const testUserCharacters = makeUserCharactersArray(testUsers);
+  const testUserWeapons = makeUserWeaponsArray(testUsers, testUserCharacters);
+  const testUserWeaponsResults = makeUserWeaponsResults(testUserWeapons);
+  return { testUsers, testUserCharacters, testUserWeapons, testUserWeaponsResults };
+}
+
+function makeShieldsFixtures() {
+  const testUsers = makeUsersArray();
+  const testUserCharacters = makeUserCharactersArray(testUsers);
+  const testUserShields = makeUserShieldsArray(testUsers, testUserCharacters);
+  const testUserShieldsResults = makeUserShieldsResults(testUserShields);
+  return { testUsers, testUserCharacters, testUserShields, testUserShieldsResults };
+}
+
+function cleanTables(db) {
+  return db.raw(
+    `TRUNCATE
+      users, user_characters, user_weapons
+      RESTART IDENTITY CASCADE`
+  );
+}
+
+function seedUsers(db, users) {
+  const preppedUsers = users.map(user => ({
+    ...user,
+    password: bcrypt.hashSync(user.password, 1)
+  }));
+  return db
+    .into('users')
+    .insert(preppedUsers)
+    .then(() =>
+      // update the auto sequence to stay in sync
+      db.raw(`SELECT setval('users_id_seq', ?)`, [users[users.length - 1].id])
+    );
+}
+
+function seedCharactersTables(db, users, characters) {
+  return db.transaction(async trx => {
+    await seedUsers(trx, users);
+    await trx.into('user_characters').insert(characters);
+    await trx.raw(`SELECT setval('user_characters_id_seq', ?)`, [characters[characters.length - 1].id]);
+  });
+}
+
+function seedWeaponsTables(db, users, characters, weapons) {
+  for (let i = 0; i < weapons.length; i++) {
+    weapons[i] = { user_id: 1, ...weapons[i] };
+  }
+  return db.transaction(async trx => {
+    await seedCharactersTables(trx, users, characters);
+    await trx.into('user_weapons').insert(weapons);
+  });
+}
+
+function seedShieldsTables(db, users, characters, shields) {
+  for (let i = 0; i < shields.length; i++) {
+    shields[i] = { user_id: 1, ...shields[i] };
+  }
+  return db.transaction(async trx => {
+    await seedCharactersTables(trx, users, characters);
+    await trx.into('user_shields').insert(shields);
+  });
+}
+
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+  const token = jwt.sign({ user_id: user.id }, secret, {
+    subject: user.user_name,
+    algorithm: 'HS256'
+  });
+  return `Bearer ${token}`;
+}
+
 function makeUsersArray() {
   return [
     {
@@ -59,122 +139,194 @@ function makeUserCharactersArray(users) {
   ];
 }
 
-function makeExpectedThing(users, thing, reviews = []) {
-  const user = users.find(user => user.id === thing.user_id);
-
-  return {
-    id: thing.id,
-    image: thing.image,
-    title: thing.title,
-    content: thing.content,
-    date_created: thing.date_created,
-    average_review_rating,
-    user: {
-      id: user.id,
-      user_name: user.user_name,
-      date_created: user.date_created
+function makeUserWeaponsArray(characters) {
+  return [
+    {
+      char_id: characters[0].id,
+      weapon_id: 1,
+      prefix_1: 1,
+      prefix_2: 2,
+      element: 'fire',
+      anointment_id: 6,
+      item_score: 621,
+      damage: 333,
+      accuracy: 88,
+      handling: 77,
+      reload_time: 3.2,
+      fire_rate: 1.5,
+      magazine_size: 10
+    },
+    {
+      char_id: characters[0].id,
+      weapon_id: 2,
+      prefix_1: 1,
+      prefix_2: 2,
+      element: 'fire',
+      anointment_id: 6,
+      item_score: 621,
+      damage: 333,
+      accuracy: 88,
+      handling: 77,
+      reload_time: 3.2,
+      fire_rate: 1.5,
+      magazine_size: 10
+    },
+    {
+      char_id: characters[0].id,
+      weapon_id: 3,
+      prefix_1: 1,
+      prefix_2: 2,
+      element: 'fire',
+      anointment_id: 6,
+      item_score: 621,
+      damage: 333,
+      accuracy: 88,
+      handling: 77,
+      reload_time: 3.2,
+      fire_rate: 1.5,
+      magazine_size: 10
     }
-  };
+  ];
 }
 
-function makeExpectedThingReviews(users, thingId, reviews) {
-  const expectedReviews = reviews.filter(review => review.thing_id === thingId);
+function makeUserWeaponsResults(wpns) {
+  const userWeaponsResults = [];
 
-  return expectedReviews.map(review => {
-    const reviewUser = users.find(user => user.id === review.user_id);
-    return {
-      id: review.id,
-      text: review.text,
-      rating: review.rating,
-      date_created: review.date_created,
-      user: {
-        id: reviewUser.id,
-        user_name: reviewUser.user_name,
-        date_created: reviewUser.date_created
-      }
-    };
-  });
+  additionalWeaponResponseValues = [
+    {
+      anointment:
+        'On Action Skill End, Weapon Status Effect Damage & Chance are increased by 75% for a short time.',
+      mfr_id: 1,
+      mfr_name: 'Atlas',
+      name: 'Rebel Yell',
+      pre_title_1: 'Cost-Effective',
+      pre_title_2: 'Overencumbered',
+      rarity: 'Legendary',
+      user_weapon_id: 1,
+      weapon_id: 1,
+      weapon_type: 'assault rifle'
+    },
+    {
+      anointment:
+        'On Action Skill End, Weapon Status Effect Damage & Chance are increased by 75% for a short time.',
+      mfr_id: 1,
+      mfr_name: 'Atlas',
+      name: 'Carrier',
+      pre_title_1: 'Cost-Effective',
+      pre_title_2: 'Overencumbered',
+      rarity: 'Legendary',
+      user_weapon_id: 2,
+      weapon_id: 2,
+      weapon_type: 'assault rifle'
+    },
+    {
+      anointment:
+        'On Action Skill End, Weapon Status Effect Damage & Chance are increased by 75% for a short time.',
+      mfr_id: 1,
+      mfr_name: 'Atlas',
+      name: 'Linc',
+      pre_title_1: 'Cost-Effective',
+      pre_title_2: 'Overencumbered',
+      rarity: 'Legendary',
+      user_weapon_id: 3,
+      weapon_id: 3,
+      weapon_type: 'pistol'
+    }
+  ];
+
+  for (let i = 0; i < wpns.length; i++) {
+    userWeaponsResults.unshift({ ...wpns[i], ...additionalWeaponResponseValues[i] });
+  }
+
+  return userWeaponsResults;
 }
 
-function makeMaliciousThing(user) {
-  const maliciousThing = {
-    id: 911,
-    image: 'http://placehold.it/500x500',
-    date_created: new Date().toISOString(),
-    title: 'Naughty naughty very naughty <script>alert("xss");</script>',
-    user_id: user.id,
-    content: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`
-  };
-  const expectedThing = {
-    ...makeExpectedThing([user], maliciousThing),
-    title: 'Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
-    content: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`
-  };
-  return {
-    maliciousThing,
-    expectedThing
-  };
+function makeUserShieldsArray(characters) {
+  return [
+    {
+      char_id: characters[0].id,
+      shield_id: 1,
+      prefix: 'Absorb',
+      element: 'fire',
+      anointment_id: 6,
+      item_score: 621,
+      capacity: 10000,
+      recharge_rate: 1000,
+      recharge_delay: 3.2
+    },
+    {
+      char_id: characters[0].id,
+      shield_id: 2,
+      prefix: 'Absorb',
+      element: 'fire',
+      anointment_id: 6,
+      item_score: 621,
+      capacity: 10000,
+      recharge_rate: 1000,
+      recharge_delay: 3.2
+    },
+    {
+      char_id: characters[0].id,
+      shield_id: 3,
+      prefix: 'Absorb',
+      element: 'fire',
+      anointment_id: 6,
+      item_score: 621,
+      item_score: 621,
+      capacity: 10000,
+      recharge_rate: 1000,
+      recharge_delay: 3.2
+    }
+  ];
 }
 
-function makeCharactersFixtures() {
-  const testUsers = makeUsersArray();
-  const testUserCharacters = makeUserCharactersArray(testUsers);
-  return { testUsers, testUserCharacters };
-}
+function makeUserShieldsResults(shields) {
+  const userShieldsResults = [];
 
-function cleanTables(db) {
-  return db.raw(
-    `TRUNCATE
-      users, user_characters
-      RESTART IDENTITY CASCADE`
-  );
-}
+  additionalShieldResponseValues = [
+    {
+      anointment:
+        'On Action Skill End, Weapon Status Effect Damage & Chance are increased by 75% for a short time.',
+      mfr_name: 'Anshin',
+      name: 'Deluxe Badass Combustor',
+      rarity: 'Legendary',
+      user_shield_id: 1
+    },
+    {
+      anointment:
+        'On Action Skill End, Weapon Status Effect Damage & Chance are increased by 75% for a short time.',
+      mfr_name: 'Anshin',
+      name: 'Frozen Heart',
+      rarity: 'Legendary',
+      user_shield_id: 2
+    },
+    {
+      anointment:
+        'On Action Skill End, Weapon Status Effect Damage & Chance are increased by 75% for a short time.',
+      mfr_name: 'Anshin',
+      name: 'Messy Breakup',
+      rarity: 'Legendary',
+      user_shield_id: 3
+    }
+  ];
 
-function seedUsers(db, users) {
-  const preppedUsers = users.map(user => ({
-    ...user,
-    password: bcrypt.hashSync(user.password, 1)
-  }));
-  return db
-    .into('users')
-    .insert(preppedUsers)
-    .then(() =>
-      // update the auto sequence to stay in sync
-      db.raw(`SELECT setval('users_id_seq', ?)`, [users[users.length - 1].id])
-    );
-}
+  for (let i = 0; i < shields.length; i++) {
+    userShieldsResults.unshift({ ...shields[i], ...additionalShieldResponseValues[i] });
+  }
 
-function seedCharactersTables(db, users, characters) {
-  return db.transaction(async trx => {
-    await seedUsers(trx, users);
-    await trx.into('user_characters').insert(characters);
-    await trx.raw(`SELECT setval('user_characters_id_seq', ?)`, [characters[characters.length - 1].id]);
-  });
-}
-
-function seedMaliciousThing(db, user, thing) {
-  return seedUsers(db, [user]).then(() => db.into('thingful_things').insert([thing]));
-}
-
-function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
-  const token = jwt.sign({ user_id: user.id }, secret, {
-    subject: user.user_name,
-    algorithm: 'HS256'
-  });
-  return `Bearer ${token}`;
+  return userShieldsResults;
 }
 
 module.exports = {
   makeUsersArray,
   makeUserCharactersArray,
-  makeExpectedThing,
-  makeExpectedThingReviews,
-  makeMaliciousThing,
-
   makeCharactersFixtures,
+  makeWeaponsFixtures,
+  makeShieldsFixtures,
   cleanTables,
   seedCharactersTables,
-  seedMaliciousThing,
+  seedWeaponsTables,
+  seedShieldsTables,
   makeAuthHeader,
   seedUsers
 };

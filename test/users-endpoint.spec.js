@@ -120,7 +120,7 @@ describe('Users Endpoints', function() {
     context(`Happy path`, () => {
       it(`responds 201, serialized user, storing bcryped password`, () => {
         const newUser = {
-          user_name: 'test user_name',
+          user_name: 'test_user_name',
           password: 'aaaabbb1'
         };
         return supertest(app)

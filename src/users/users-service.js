@@ -42,10 +42,10 @@ const UsersService = {
       .returning('*')
       .then(([user]) => user)
       .then(user => {
-        return db
-          .insert({ user_id: user.id, character: 'Bank', character_name: 'Bank' })
+        db.insert({ user_id: user.id, character: 'Bank', character_name: 'Bank' })
           .into('user_characters')
           .then(user);
+        return user;
       });
   }
 };

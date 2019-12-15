@@ -71,4 +71,53 @@ describe('Characters Endpoints', function() {
         );
     });
   });
+
+  describe(`PATCH /api/characters/:id`, () => {
+    beforeEach(() => helpers.seedCharactersTables(db, testUsers, testUserCharacters));
+
+    const updatedChar = {
+      character_name: 'testing'
+    };
+
+    let charToUpdate = 1;
+
+    it(`responds 204, it updated character`, () => {
+      return supertest(app)
+        .patch(`/api/characters/${charToUpdate}`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .send(updatedChar)
+        .expect(204)
+        .expect(res =>
+          db
+            .from('user_characters')
+            .select('*')
+            .where({ id: `${charToUpdate}` })
+            .first()
+            .then(row => {
+              expect();
+              expect(row.character_name).to.eql(updatedChar.character_name);
+            })
+        );
+    });
+  });
+
+  describe('DELETE /api/characters/:id', () => {
+    beforeEach(() => helpers.seedCharactersTables(db, testUsers, testUserCharacters));
+    it('responds with 204 and removes the character', () => {
+      const removeId = 2;
+      const expectedChars = testUserCharacters.filter(
+        char => char.id !== removeId && char.user_id === testUsers[0].id
+      );
+      return supertest(app)
+        .delete(`/api/characters/${removeId}`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[1]))
+        .expect(204)
+        .then(res =>
+          supertest(app)
+            .get('/api/characters')
+            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+            .expect(expectedChars)
+        );
+    });
+  });
 });

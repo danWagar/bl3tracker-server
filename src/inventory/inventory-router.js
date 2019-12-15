@@ -102,7 +102,17 @@ inventoryRouter
   .route('/shields')
   .all(requireAuth)
   .post(bodyParser, (req, res, next) => {
-    const { char_id, shield_id, prefix, element, anointment_id, item_score, us } = req.body;
+    const {
+      char_id,
+      shield_id,
+      prefix,
+      element,
+      anointment_id,
+      item_score,
+      capacity,
+      recharge_delay,
+      recharge_rate
+    } = req.body;
 
     const newShield = {
       char_id,

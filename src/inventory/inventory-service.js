@@ -132,13 +132,13 @@ const InventoryService = {
       element: weaponData.element,
       anointment: weaponData.anointment,
       anointment_id: weaponData.anointment_id,
-      item_score: xss(weaponData.item_score),
-      damage: xss(weaponData.damage),
-      accuracy: xss(weaponData.accuracy),
-      handling: xss(weaponData.handling),
-      reload_time: xss(weaponData.reload_time),
-      fire_rate: xss(weaponData.fire_rate),
-      magazine_size: xss(weaponData.magazine_size)
+      item_score: Number(xss(weaponData.item_score)),
+      damage: Number(xss(weaponData.damage)),
+      accuracy: Number(xss(weaponData.accuracy)),
+      handling: Number(xss(weaponData.handling)),
+      reload_time: Number(xss(weaponData.reload_time)),
+      fire_rate: Number(xss(weaponData.fire_rate)),
+      magazine_size: Number(xss(weaponData.magazine_size))
     };
   },
 
@@ -146,12 +146,15 @@ const InventoryService = {
     return db
       .select(
         'u.id as user_shield_id',
+        'shield_id',
+        'char_id',
         'mfr_name',
         'name',
         'rarity',
         'prefix',
         'element',
         'description as anointment',
+        'anointment_id',
         'item_score',
         'capacity',
         'recharge_delay',
@@ -237,10 +240,10 @@ const InventoryService = {
       element: shieldData.element,
       anointment: shieldData.anointment,
       anointment_id: shieldData.anointment_id,
-      item_score: xss(shieldData.item_score),
-      capacity: xss(shieldData.capacity),
-      recharge_delay: xss(shieldData.recharge_delay),
-      recharge_rate: xss(shieldData.recharge_rate)
+      item_score: Number(xss(shieldData.item_score)),
+      capacity: Number(xss(shieldData.capacity)),
+      recharge_delay: Number(xss(shieldData.recharge_delay)),
+      recharge_rate: Number(xss(shieldData.recharge_rate))
     };
   }
 };
